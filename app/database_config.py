@@ -7,22 +7,42 @@ import yaml
 import os
 from typing import Dict, Any, Optional
 
-CONFIG_PATH = "/data/databases.yaml"
+# Default to Docker path, but allow override via ENV
+# In local development, we'll try to find it in the data directory
+CONFIG_PATH = os.getenv("DATABASE_CONFIG_PATH", "/data/databases.yaml")
+
+# Check fallback locations if the primary doesn't exist
+FALLBACK_PATHS = [
+    "/data/references/databases.yaml",
+    "data/databases.yaml",
+    "data/references/databases.yaml"
+]
+
+def get_actual_config_path() -> str:
+    if os.path.exists(CONFIG_PATH):
+        return CONFIG_PATH
+    for path in FALLBACK_PATHS:
+        if os.path.exists(path):
+            return path
+    return CONFIG_PATH
+
 
 
 def load_config() -> Dict[str, Any]:
     """加载数据库配置"""
-    if not os.path.exists(CONFIG_PATH):
+    path = get_actual_config_path()
+    if not os.path.exists(path):
         return {}
-    with open(CONFIG_PATH, 'r', encoding='utf-8') as f:
+    with open(path, 'r', encoding='utf-8') as f:
         return yaml.safe_load(f) or {}
 
 
 def save_config(config: Dict[str, Any]) -> None:
     """保存数据库配置"""
+    path = get_actual_config_path()
     # 确保目录存在
-    os.makedirs(os.path.dirname(CONFIG_PATH), exist_ok=True)
-    with open(CONFIG_PATH, 'w', encoding='utf-8') as f:
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    with open(path, 'w', encoding='utf-8') as f:
         yaml.dump(config, f, allow_unicode=True, default_flow_style=False)
 
 

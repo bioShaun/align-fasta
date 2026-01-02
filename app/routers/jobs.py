@@ -5,8 +5,13 @@ import os
 
 router = APIRouter(prefix="/api/jobs", tags=["jobs"])
 
-UPLOAD_DIR = "/data/uploads"
-REF_DIR = "/data/references"
+UPLOAD_DIR = os.getenv("UPLOAD_DIR", "/data/uploads")
+if not os.path.exists(UPLOAD_DIR):
+    UPLOAD_DIR = "data/uploads"
+
+REF_DIR = os.getenv("REF_DIR", "/data/references")
+if not os.path.exists(REF_DIR):
+    REF_DIR = "data/references"
 
 @router.post("/", response_model=JobStatus)
 def submit_job(job: JobSubmit):

@@ -64,52 +64,6 @@ export const useAlignmentStore = defineStore('alignment', {
             }
         },
 
-        async updateDatabase(id: string, update: {
-            species?: string;
-            genome_version?: string;
-            sequence_type?: string;
-            description?: string;
-        }) {
-            try {
-                await api.updateDatabase(id, update);
-                await this.fetchDatabases();
-            } catch (err: any) {
-                this.error = 'Failed to update database';
-            }
-        },
-
-        async deleteDatabase(id: string) {
-            try {
-                await api.deleteDatabase(id);
-                await this.fetchDatabases();
-            } catch (err: any) {
-                this.error = 'Failed to delete database';
-            }
-        },
-
-        async createIndex(id: string, tool: string) {
-            try {
-                await api.createIndex(id, tool);
-                // We don't wait for the background indexing to finish here
-                // but we might want to poll or refresh later
-                setTimeout(() => this.fetchDatabases(), 2000);
-            } catch (err: any) {
-                this.error = 'Failed to create index';
-            }
-        },
-
-        async uploadReference(file: File) {
-            this.loading = true;
-            try {
-                await api.uploadReference(file);
-                await this.fetchDatabases();
-            } catch (err: any) {
-                this.error = 'Failed to upload reference';
-            } finally {
-                this.loading = false;
-            }
-        },
-
         async fetchJobStatus(jobId: string) {
             try {
                 const job = await api.getJobStatus(jobId);

@@ -1,0 +1,11 @@
+test_ref.fa:
+  species: "oryza_sativa"
+  genome_version: "IRGSP-1.0"
+  sequence_type: "genome"
+  description: ""
+
+oryza_sativa_T2T-NIP.t2t.test.fa:
+  species: "oryza_sativa"
+  genome_version: "T2T-NIP"
+  sequence_type: "genome"
+  description: ""

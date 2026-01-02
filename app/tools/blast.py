@@ -74,10 +74,19 @@ class BlastTool(AlignmentTool):
                         # Calculate mismatch = align_len - identity - gaps
                         mismatch = align_len - identity - gaps if align_len > 0 else 0
                         
+                        # Improved sseqid parsing
+                        # Priority: title (original FASTA header) > id > accession
+                        # Note: id like "gnl|BL_ORD_ID|0" and accession "0" are BLAST internal IDs
+                        title = description.get("title", "")
+                        sseqid = title.split()[0] if title else ""
+                        if not sseqid:
+                            # Fallback to id/accession if title is empty
+                            sseqid = description.get("id") or description.get("accession") or "Unknown"
+                        
                         hits.append({
                             # outfmt 6 standard columns
                             "qseqid": query_title,
-                            "sseqid": description.get("accession", ""),
+                            "sseqid": sseqid,
                             "pident": pident,
                             "length": align_len,
                             "mismatch": mismatch,

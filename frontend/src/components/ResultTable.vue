@@ -190,7 +190,7 @@ const downloadTSV = () => {
     <div class="bg-slate-900/30 border border-slate-800 p-6 rounded-2xl">
       <h3 class="text-sm font-bold text-slate-400 flex items-center gap-2 mb-4">
         <HelpCircle class="w-4 h-4 text-indigo-400" />
-        表格列说明（参照 BLAST -outfmt 6）
+        {{ tool === 'blast' ? 'BLAST 比对结果列说明' : 'Minimap2 比对结果列说明' }} (参照标准格式)
       </h3>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <template v-if="tool === 'blast'">

@@ -11,7 +11,7 @@ const router = useRouter();
 const selectedFile = ref<File | null>(null);
 const selectedDbs = ref<string[]>([]);
 const selectedTool = ref('blast');
-const useShortQuery = ref(false);
+const selectedBlastTask = ref('blastn');
 const queryText = ref('');
 const inputMethod = ref<'paste' | 'file'>('paste');
 const fileInput = ref<HTMLInputElement | null>(null);
@@ -35,7 +35,11 @@ watch(queryText, (newVal) => {
     const seqLen = lines.join('').replace(/\s/g, '').length;
     maxSeqLen = Math.max(maxSeqLen, seqLen);
   }
-  useShortQuery.value = maxSeqLen > 0 && maxSeqLen < 50;
+  if (maxSeqLen > 0 && maxSeqLen < 50) {
+    selectedBlastTask.value = 'blastn-short';
+  } else if (selectedBlastTask.value === 'blastn-short') {
+    selectedBlastTask.value = 'blastn';
+  }
 });
 
 onMounted(() => {
@@ -75,8 +79,8 @@ const submitJob = async () => {
     if (!input) return;
 
     const options: any = {};
-    if (selectedTool.value === 'blast' && useShortQuery.value) {
-      options.task = 'blastn-short';
+    if (selectedTool.value === 'blast') {
+      options.task = selectedBlastTask.value;
     }
 
     const job = await store.submitAlignment(input, selectedDbs.value, selectedTool.value, options);
@@ -131,17 +135,30 @@ const submitJob = async () => {
             </div>
           </div>
 
-          <!-- Short Query Option (BLAST only) -->
-          <div v-if="selectedTool === 'blast'" class="flex items-center gap-3 px-1 py-1 bg-indigo-500/5 rounded-lg border border-indigo-500/10 transition-all">
-            <input 
-              type="checkbox" 
-              id="shortQuery" 
-              v-model="useShortQuery"
-              class="w-5 h-5 rounded border-slate-700 bg-slate-800 text-indigo-600 focus:ring-indigo-500/50 cursor-pointer"
-            >
-            <label for="shortQuery" class="text-sm text-slate-300 select-none cursor-pointer hover:text-white transition-colors">
-              短序列优化 (适用于序列 &lt; 50bp)
-            </label>
+          <!-- BLAST Task Selection -->
+          <div v-if="selectedTool === 'blast'" class="space-y-3">
+            <label class="block text-sm font-medium text-slate-400">选择比对模式 (Task)</label>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+              <button 
+                v-for="task in ['blastn', 'blastn-short', 'megablast', 'dc-megablast']"
+                :key="task"
+                @click="selectedBlastTask = task"
+                :class="[
+                  'px-3 py-2 rounded-lg text-xs font-bold border transition-all',
+                  selectedBlastTask === task
+                    ? 'bg-indigo-600 border-indigo-500 text-white shadow-lg'
+                    : 'bg-slate-800 border-slate-700 text-slate-400 hover:border-slate-600'
+                ]"
+              >
+                {{ task }}
+              </button>
+            </div>
+            <p class="text-[10px] text-slate-500 leading-relaxed italic border-l-2 border-indigo-500/30 pl-3">
+              <span v-if="selectedBlastTask === 'blastn'"><b>blastn</b>: 通用核酸比对，适用于中等相似度序列。</span>
+              <span v-else-if="selectedBlastTask === 'blastn-short'"><b>blastn-short</b>: 优化短序列比对 (&lt; 50bp)，如引物或探针。</span>
+              <span v-else-if="selectedBlastTask === 'megablast'"><b>megablast</b>: 快速比对高度相似序列 (一致性 &gt; 95%)。</span>
+              <span v-else-if="selectedBlastTask === 'dc-megablast'"><b>dc-megablast</b>: 不连续 megablast，适用于远缘同源核酸序列。</span>
+            </p>
           </div>
 
           <!-- Database Selection -->

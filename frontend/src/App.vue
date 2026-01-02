@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Activity, Search, Database, History, HelpCircle } from 'lucide-vue-next';
+import { Activity, Search, HelpCircle } from 'lucide-vue-next';
 import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
@@ -7,8 +7,6 @@ const route = useRoute();
 
 const navItems = [
   { name: '序列比对', path: '/', icon: Search },
-  { name: '管理面板', path: '/admin', icon: Database },
-  { name: '比对历史', path: '/history', icon: History },
 ];
 </script>
 

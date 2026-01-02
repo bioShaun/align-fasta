@@ -1,0 +1,49 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.env
+.venv
+env/
+venv/
+ENV/
+
+# Node/Frontend
+node_modules/
+dist/
+.eslintcache
+.stylelintcache
+*.local
+
+# Data (Crucial: ignore references, indices and results)
+data/references/*
+!data/references/.gitkeep
+data/uploads/*
+!data/uploads/.gitkeep
+data/results/*
+!data/results/.gitkeep
+# But keep the config files in data if they are part of the versioning
+# Wait, user might want to keep databases.yaml, so we don't ignore it
+# data/databases.yaml
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Project specific
+*.blast.json
+*.mmi
+*.nin
+*.nhr
+*.nsq
+*.ndb
+*.not
+*.ntf
+*.nto
+*.njs
