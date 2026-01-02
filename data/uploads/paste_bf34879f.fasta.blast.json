@@ -1,0 +1,131 @@
+{
+"BlastOutput2": [
+{
+    "report": {
+      "program": "blastn",
+      "version": "BLASTN 2.12.0+",
+      "reference": "Stephen F. Altschul, Thomas L. Madden, Alejandro A. Sch&auml;ffer, Jinghui Zhang, Zheng Zhang, Webb Miller, and David J. Lipman (1997), \"Gapped BLAST and PSI-BLAST: a new generation of protein database search programs\", Nucleic Acids Res. 25:3389-3402.",
+      "search_target": {
+        "db": "/data/references/test_ref.fa"
+      },
+      "params": {
+        "expect": 10,
+        "sc_match": 1,
+        "sc_mismatch": -3,
+        "gap_open": 5,
+        "gap_extend": 2,
+        "filter": "L;m;"
+      },
+      "results": {
+        "search": {
+          "query_id": "Query_1",
+          "query_title": "1",
+          "query_len": 110,
+          "query_masking": [
+            {
+              "from": 26,
+              "to": 95
+            }
+          ],
+          "hits": [
+            {
+              "num": 1,
+              "description": [
+                {
+                  "id": "gnl|BL_ORD_ID|0",
+                  "accession": "0",
+                  "title": "1"
+                }
+              ],
+              "len": 10000,
+              "hsps": [
+                {
+                  "num": 1,
+                  "bit_score": 218.552,
+                  "score": 110,
+                  "evalue": 1.61774e-60,
+                  "identity": 110,
+                  "query_from": 1,
+                  "query_to": 110,
+                  "query_strand": "Plus",
+                  "hit_from": 2493,
+                  "hit_to": 2602,
+                  "hit_strand": "Plus",
+                  "align_len": 110,
+                  "gaps": 0,
+                  "qseq": "CTCACAAGCATACCAACGACCATGATaaatccaaaaagtagaaacaatctattatctaaacccccaaaagacaaaagaaaaaagtagaaagaaaagGTAGGCAGAGATAT",
+                  "hseq": "CTCACAAGCATACCAACGACCATGATAAATCCAAAAAGTAGAAACAATCTATTATCTAAACCCCCAAAAGACAAAAGAAAAAAGTAGAAAGAAAAGGTAGGCAGAGATAT",
+                  "midline": "||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||||"
+                },
+                {
+                  "num": 2,
+                  "bit_score": 20.3164,
+                  "score": 10,
+                  "evalue": 0.765089,
+                  "identity": 10,
+                  "query_from": 20,
+                  "query_to": 29,
+                  "query_strand": "Plus",
+                  "hit_from": 2897,
+                  "hit_to": 2906,
+                  "hit_strand": "Plus",
+                  "align_len": 10,
+                  "gaps": 0,
+                  "qseq": "CCATGATaaa",
+                  "hseq": "CCATGATAAA",
+                  "midline": "||||||||||"
+                },
+                {
+                  "num": 3,
+                  "bit_score": 18.3341,
+                  "score": 9,
+                  "evalue": 3.02315,
+                  "identity": 9,
+                  "query_from": 97,
+                  "query_to": 105,
+                  "query_strand": "Plus",
+                  "hit_from": 4638,
+                  "hit_to": 4646,
+                  "hit_strand": "Plus",
+                  "align_len": 9,
+                  "gaps": 0,
+                  "qseq": "GTAGGCAGA",
+                  "hseq": "GTAGGCAGA",
+                  "midline": "|||||||||"
+                },
+                {
+                  "num": 4,
+                  "bit_score": 18.3341,
+                  "score": 9,
+                  "evalue": 3.02315,
+                  "identity": 9,
+                  "query_from": 9,
+                  "query_to": 17,
+                  "query_strand": "Plus",
+                  "hit_from": 7379,
+                  "hit_to": 7387,
+                  "hit_strand": "Plus",
+                  "align_len": 9,
+                  "gaps": 0,
+                  "qseq": "CATACCAAC",
+                  "hseq": "CATACCAAC",
+                  "midline": "|||||||||"
+                }
+              ]
+            }
+          ],
+          "stat": {
+            "db_num": 1,
+            "db_len": 10000,
+            "hsp_len": 10,
+            "eff_space": 999000,
+            "kappa": 0.710602795216363,
+            "lambda": 1.37406312246009,
+            "entropy": 1.30724660390929
+          }
+        }
+      }
+    }
+  }
+]
+}
