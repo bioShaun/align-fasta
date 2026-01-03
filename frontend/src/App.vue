@@ -1,44 +1,42 @@
 <script setup lang="ts">
-import { Activity, Search, HelpCircle } from 'lucide-vue-next';
+import { Activity, HelpCircle } from 'lucide-vue-next';
 import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
 const route = useRoute();
 
-const navItems = [
-  { name: '序列比对', path: '/', icon: Search },
-];
+const navItems = [] as { name: string, path: string, icon: any }[];
 </script>
 
 <template>
-  <div class="min-h-screen bg-slate-950 text-slate-100 font-sans selection:bg-indigo-500/30">
+  <div class="min-h-screen bg-gray-50 text-gray-900 font-sans selection:bg-primary-500/10">
     <!-- Navbar -->
-    <nav class="border-b border-slate-800 bg-slate-900/50 backdrop-blur-xl sticky top-0 z-50">
+    <nav class="border-b border-gray-200 bg-white/80 backdrop-blur-xl sticky top-0 z-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex items-center justify-between h-16">
           <div 
             class="flex items-center gap-3 cursor-pointer group" 
             @click="router.push('/')"
           >
-            <div class="p-2 bg-indigo-600 rounded-lg shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform">
+            <div class="p-2 bg-primary-600 rounded shadow-md group-hover:scale-105 transition-transform">
               <Activity class="w-6 h-6 text-white" />
             </div>
-            <span class="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-400">
+            <span class="text-xl font-bold text-gray-900">
               AlignFasta
             </span>
           </div>
 
           <!-- Desktop Nav -->
-          <div class="hidden md:flex items-center gap-8 text-sm font-bold">
+          <div class="hidden md:flex items-center gap-8 text-sm font-medium">
             <template v-for="item in navItems" :key="item.path">
               <a 
                 href="#"
                 @click.prevent="router.push(item.path)"
                 :class="[
-                  'flex items-center gap-2 transition-all px-3 py-2 rounded-lg',
+                  'flex items-center gap-2 transition-all px-3 py-2 rounded-md',
                   route.path === item.path 
-                    ? 'text-white bg-white/5' 
-                    : 'text-slate-400 hover:text-white hover:bg-white/5'
+                    ? 'text-primary-600 bg-primary-50' 
+                    : 'text-gray-500 hover:text-gray-900 hover:bg-gray-50'
                 ]"
               >
                 <component :is="item.icon" class="w-4 h-4" />
@@ -46,9 +44,9 @@ const navItems = [
               </a>
             </template>
             
-            <div class="h-4 w-px bg-slate-800 mx-2"></div>
+            <div v-if="navItems.length > 0" class="h-4 w-px bg-gray-200 mx-2"></div>
             
-            <a href="#" class="text-slate-500 hover:text-white transition-colors">
+            <a href="#" class="text-gray-400 hover:text-primary-600 transition-colors">
               <HelpCircle class="w-5 h-5" />
             </a>
           </div>
@@ -73,18 +71,18 @@ const navItems = [
     </main>
 
     <!-- Footer -->
-    <footer class="border-t border-slate-800 mt-24 py-12 text-slate-500 text-sm">
+    <footer class="border-t border-gray-200 mt-24 py-12 text-gray-500 text-sm bg-white">
       <div class="max-w-7xl mx-auto px-4">
         <div class="flex flex-col md:flex-row justify-between items-center gap-6">
           <div class="flex items-center gap-2">
-            <Activity class="w-4 h-4 text-indigo-500" />
-            <span class="font-bold text-slate-400">AlignFasta</span>
+            <Activity class="w-4 h-4 text-primary-600" />
+            <span class="font-bold text-gray-800">AlignFasta</span>
           </div>
           <p>© 2026 AlignFasta 专业序列比对服务。基于 FastAPI, Vue 3 和 Celery 构建。</p>
           <div class="flex gap-6">
-            <a href="#" class="hover:text-white transition-colors">联系支持</a>
-            <a href="#" class="hover:text-white transition-colors">API 文档</a>
-            <a href="#" class="hover:text-white transition-colors">隐私权政策</a>
+            <a href="#" class="hover:text-primary-600 transition-colors">联系支持</a>
+            <a href="#" class="hover:text-primary-600 transition-colors">API 文档</a>
+            <a href="#" class="hover:text-primary-600 transition-colors">隐私权政策</a>
           </div>
         </div>
       </div>
@@ -103,10 +101,10 @@ html {
   width: 10px;
 }
 ::-webkit-scrollbar-track {
-  @apply bg-slate-950;
+  @apply bg-gray-50;
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-800 rounded-full border-4 border-slate-950 hover:bg-slate-700;
+  @apply bg-gray-200 rounded-full border-4 border-gray-50 hover:bg-gray-300;
 }
 
 /* Typography polish */
