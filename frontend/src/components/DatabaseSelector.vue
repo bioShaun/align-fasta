@@ -268,10 +268,6 @@ const clearAll = () => {
                   <span class="text-sm font-semibold truncate" :class="modelValue.includes(db.id) ? 'text-primary-700' : 'text-gray-800'">
                     {{ db.genome_version || db.name }}
                   </span>
-                  <!-- Subtitle: filename -->
-                  <span class="text-[10px] text-gray-400 mt-0.5 truncate">
-                    {{ db.name }}
-                  </span>
                 </div>
                 <component 
                   :is="modelValue.includes(db.id) ? CheckCircle2 : Circle"
