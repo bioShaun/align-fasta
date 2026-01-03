@@ -130,22 +130,22 @@ const navItems = [
 ## 5. 任务列表 (Task List)
 
 ### Phase 1: 基础样式调整 (低风险)
-- [ ] **Task 1.1**: 修改 `tailwind.config.js`，添加学术主题色
-- [ ] **Task 1.2**: 修改 `index.css`，设置浅色背景基础
-- [ ] **Task 1.3**: 修改 `App.vue`
+- [x] **Task 1.1**: 修改 `tailwind.config.js`，添加学术主题色
+- [x] **Task 1.2**: 修改 `index.css`，设置浅色背景基础
+- [x] **Task 1.3**: 修改 `App.vue`
     - 清空 `navItems`
     - 调整 Navbar/Footer 为浅色主题
 
 ### Phase 2: 核心组件开发 (中风险)
-- [ ] **Task 2.1**: 创建 `DatabaseSelector.vue` 骨架
-- [ ] **Task 2.2**: 实现物种搜索过滤
-- [ ] **Task 2.3**: 实现多选逻辑与已选汇总
-- [ ] **Task 2.4**: 响应式布局 (移动端堆叠)
+- [x] **Task 2.1**: 创建 `DatabaseSelector.vue` 骨架
+- [x] **Task 2.2**: 实现物种搜索过滤
+- [x] **Task 2.3**: 实现多选逻辑与已选汇总
+- [x] **Task 2.4**: 响应式布局 (移动端堆叠)
 
 ### Phase 3: 集成与收尾
-- [ ] **Task 3.1**: 在 `Home.vue` 中集成 `DatabaseSelector`
-- [ ] **Task 3.2**: 调整 `Home.vue` 其余区域样式
-- [ ] **Task 3.3**: 端到端测试 (选择 → 提交 → 结果)
+- [x] **Task 3.1**: 在 `Home.vue` 中集成 `DatabaseSelector`
+- [x] **Task 3.2**: 调整 `Home.vue` 其余区域样式
+- [x] **Task 3.3**: 端到端测试 (选择 → 提交 → 结果)
 
 ---
 

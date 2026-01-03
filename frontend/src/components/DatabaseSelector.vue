@@ -15,6 +15,23 @@ const emit = defineEmits<{
 const searchQuery = ref('');
 const selectedSpecies = ref<string | null>(null);
 
+// sequence_type 本地化映射与排序权重
+const typeLabelMap: Record<string, { label: string; order: number }> = {
+  genome: { label: '基因组', order: 1 },
+  cds: { label: 'CDS', order: 2 },
+  exon: { label: '外显子', order: 3 },
+};
+
+// 获取类型的显示名称
+const getTypeLabel = (type: string): string => {
+  return typeLabelMap[type]?.label || type.charAt(0).toUpperCase() + type.slice(1);
+};
+
+// 获取类型的排序权重
+const getTypeOrder = (type: string): number => {
+  return typeLabelMap[type]?.order || 999;
+};
+
 // 按物种分组数据库
 const groupedDatabases = computed(() => {
   const groups: Record<string, Database[]> = {};
@@ -52,6 +69,28 @@ const currentDatabases = computed(() => {
   return groupedDatabases.value[selectedSpecies.value] || [];
 });
 
+// 按 sequence_type 分组当前物种的数据库（新增）
+const databasesByType = computed(() => {
+  const groups: Record<string, Database[]> = {};
+  currentDatabases.value.forEach(db => {
+    const type = db.sequence_type || 'unknown';
+    if (!groups[type]) groups[type] = [];
+    groups[type].push(db);
+  });
+  
+  // 按预定义顺序排序
+  const sortedTypes = Object.keys(groups).sort((a, b) => {
+    return getTypeOrder(a) - getTypeOrder(b);
+  });
+  
+  const sortedGroups: Record<string, Database[]> = {};
+  sortedTypes.forEach(type => {
+    sortedGroups[type] = groups[type];
+  });
+  
+  return sortedGroups;
+});
+
 // 初始化选择第一个物种
 if (filteredSpecies.value.length > 0 && selectedSpecies.value === null) {
   selectedSpecies.value = filteredSpecies.value[0] || null;
@@ -83,6 +122,25 @@ const deselectAllInSpecies = () => {
   const targetDbs = groupedDatabases.value[selectedSpecies.value];
   if (!targetDbs) return;
 
+  const dbIds = targetDbs.map(db => db.id);
+  emit('update:modelValue', props.modelValue.filter(id => !dbIds.includes(id)));
+};
+
+// 按类型全选（新增）
+const selectAllByType = (type: string) => {
+  const targetDbs = databasesByType.value[type];
+  if (!targetDbs) return;
+  
+  const dbIds = targetDbs.map(db => db.id);
+  const newValue = Array.from(new Set([...props.modelValue, ...dbIds]));
+  emit('update:modelValue', newValue);
+};
+
+// 按类型取消选择（新增）
+const deselectAllByType = (type: string) => {
+  const targetDbs = databasesByType.value[type];
+  if (!targetDbs) return;
+  
   const dbIds = targetDbs.map(db => db.id);
   emit('update:modelValue', props.modelValue.filter(id => !dbIds.includes(id)));
 };
@@ -146,10 +204,11 @@ const clearAll = () => {
     <!-- Right Content: Database List -->
     <div class="flex-1 flex flex-col min-w-0 bg-white">
       <div v-if="selectedSpecies && groupedDatabases[selectedSpecies]" class="flex flex-col h-full">
+        <!-- Species Header -->
         <div class="p-4 border-b border-gray-100 flex items-center justify-between bg-white sticky top-0 z-10">
           <div>
             <h3 class="text-base font-bold text-gray-900">{{ selectedSpecies }}</h3>
-            <p class="text-xs text-gray-500 mt-0.5">共 {{ statsPerSpecies[selectedSpecies]?.total || 0 }} 个基因组数据库</p>
+            <p class="text-xs text-gray-500 mt-0.5">共 {{ statsPerSpecies[selectedSpecies]?.total || 0 }} 个数据库</p>
           </div>
           <div class="flex gap-2">
             <button 
@@ -167,39 +226,62 @@ const clearAll = () => {
           </div>
         </div>
 
-        <div class="flex-1 overflow-y-auto p-4">
-          <div class="grid grid-cols-1 xl:grid-cols-2 gap-3">
-            <div
-              v-for="db in currentDatabases"
-              :key="db.id"
-              @click="toggleDb(db.id)"
-              :class="[
-                'p-3 rounded-lg border cursor-pointer flex items-center justify-between group transition-all',
-                modelValue.includes(db.id)
-                  ? 'border-primary-500 bg-primary-50/30'
-                  : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-              ]"
-            >
-              <div class="flex flex-col min-w-0 pr-2">
-                <span class="text-sm font-semibold truncate" :class="modelValue.includes(db.id) ? 'text-primary-700' : 'text-gray-800'">
-                  {{ db.name }}
-                </span>
-                <div class="flex gap-2 mt-1.5">
-                  <span v-if="db.genome_version" class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">
-                    {{ db.genome_version }}
+        <!-- Database Groups by Type -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-6">
+          <div v-for="(databases, type) in databasesByType" :key="type" class="space-y-3">
+            <!-- Type Group Header -->
+            <div class="flex items-center justify-between pb-2 border-b border-gray-200">
+              <h4 class="text-sm font-bold text-gray-700 uppercase tracking-wide">
+                {{ getTypeLabel(type) }}
+              </h4>
+              <div class="flex gap-2">
+                <button 
+                  @click="selectAllByType(type)"
+                  class="text-[10px] font-medium text-primary-600 hover:text-primary-700 px-1.5 py-0.5 rounded hover:bg-primary-50 transition-colors"
+                >
+                  全选
+                </button>
+                <button 
+                  @click="deselectAllByType(type)"
+                  class="text-[10px] font-medium text-gray-500 hover:text-gray-700 px-1.5 py-0.5 rounded hover:bg-gray-100 transition-colors"
+                >
+                  取消
+                </button>
+              </div>
+            </div>
+
+            <!-- Database Cards in This Type -->
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-3">
+              <div
+                v-for="db in databases"
+                :key="db.id"
+                @click="toggleDb(db.id)"
+                :class="[
+                  'p-3 rounded-lg border cursor-pointer flex items-center justify-between group transition-all',
+                  modelValue.includes(db.id)
+                    ? 'border-primary-500 bg-primary-50 shadow-sm ring-1 ring-primary-500/20'
+                    : 'border-gray-200 hover:border-gray-300 hover:bg-gray-50 hover:shadow-sm'
+                ]"
+              >
+                <div class="flex flex-col min-w-0 pr-2">
+                  <!-- Main Title: genome_version or fallback to name -->
+                  <span class="text-sm font-semibold truncate" :class="modelValue.includes(db.id) ? 'text-primary-700' : 'text-gray-800'">
+                    {{ db.genome_version || db.name }}
                   </span>
-                  <span v-if="db.sequence_type" class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded uppercase tracking-wider font-medium">
-                    {{ db.sequence_type }}
+                  <!-- Subtitle: filename -->
+                  <span class="text-[10px] text-gray-400 mt-0.5 truncate">
+                    {{ db.name }}
                   </span>
                 </div>
+                <component 
+                  :is="modelValue.includes(db.id) ? CheckCircle2 : Circle"
+                  :class="[
+                    'h-5 w-5 flex-shrink-0 transition-all',
+                    modelValue.includes(db.id) ? '' : 'text-gray-300 group-hover:text-gray-400'
+                  ]"
+                  :style="modelValue.includes(db.id) ? 'color: #2563eb; fill: #dbeafe;' : ''"
+                />
               </div>
-              <component 
-                :is="modelValue.includes(db.id) ? CheckCircle2 : Circle"
-                :class="[
-                  'h-5 w-5 flex-shrink-0 transition-all',
-                  modelValue.includes(db.id) ? 'text-primary-600 fill-primary-100' : 'text-gray-300 group-hover:text-gray-400'
-                ]"
-              />
             </div>
           </div>
         </div>

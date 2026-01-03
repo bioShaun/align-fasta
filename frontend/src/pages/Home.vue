@@ -194,7 +194,7 @@ const submitJob = async () => {
                       : 'text-gray-500 hover:text-gray-700'
                   ]"
                 >
-                  直粘贴
+                  直接粘贴
                 </button>
                 <button 
                   @click="inputMethod = 'file'"
@@ -253,7 +253,8 @@ ATGCGATCGTAGCTAGCTAGCTGATCG..."
             <button 
               @click="submitJob"
               :disabled="store.loading || (inputMethod === 'file' && !selectedFile) || (inputMethod === 'paste' && !queryText) || selectedDbs.length === 0"
-              class="w-full bg-primary-600 hover:bg-primary-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg shadow-primary-500/10 disabled:opacity-40 disabled:cursor-not-allowed text-lg active:scale-[0.98]"
+              style="background-color: #2563eb;"
+              class="w-full hover:bg-primary-700 text-white font-bold py-4 rounded-xl transition-all shadow-lg disabled:opacity-40 disabled:cursor-not-allowed text-lg active:scale-[0.98]"
             >
               <span v-if="!store.loading" class="flex items-center justify-center gap-2">
                 <Search class="w-5 h-5" />
