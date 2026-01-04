@@ -77,13 +77,13 @@ const submitJob = async () => {
 <template>
   <div class="animate-in fade-in duration-500">
     <!-- Hero Section -->
+    <!-- Hero Section -->
     <div class="text-center mb-12">
       <h1 class="text-4xl md:text-5xl font-extrabold mb-4 text-gray-900 tracking-tight">
-        专业序列比对分析
+        GenoScope
       </h1>
       <p class="text-gray-500 text-lg max-w-2xl mx-auto font-medium">
-        集成 BLAST+ 与 Minimap2 的高性能生物信息学比对服务。
-        支持多物种、多基因组版本并行处理。
+        专业基因组序列比对与分析平台。集成 BLAST+ 与 Minimap2 的高性能生物信息学服务。
       </p>
     </div>
 

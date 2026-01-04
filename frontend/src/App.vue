@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Activity, HelpCircle } from 'lucide-vue-next';
+import { Activity } from 'lucide-vue-next';
 import { useRouter, useRoute } from 'vue-router';
 
 const router = useRouter();
@@ -13,17 +13,13 @@ const navItems = [] as { name: string, path: string, icon: any }[];
     <!-- Navbar -->
     <nav class="border-b border-gray-200 bg-white/80 backdrop-blur-xl sticky top-0 z-50">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex items-center justify-between h-16">
+        <div class="flex items-center justify-between h-24">
           <div 
             class="flex items-center gap-3 cursor-pointer group" 
             @click="router.push('/')"
           >
-            <div class="p-2 bg-primary-600 rounded shadow-md group-hover:scale-105 transition-transform">
-              <Activity class="w-6 h-6 text-white" />
-            </div>
-            <span class="text-xl font-bold text-gray-900">
-              AlignFasta
-            </span>
+            <!-- GenoScope Logo Image Only -->
+            <img src="/logo-new-size.png" alt="GenoScope Logo" class="h-20 w-auto object-contain" />
           </div>
 
           <!-- Desktop Nav -->
@@ -46,9 +42,6 @@ const navItems = [] as { name: string, path: string, icon: any }[];
             
             <div v-if="navItems.length > 0" class="h-4 w-px bg-gray-200 mx-2"></div>
             
-            <a href="#" class="text-gray-400 hover:text-primary-600 transition-colors">
-              <HelpCircle class="w-5 h-5" />
-            </a>
           </div>
         </div>
       </div>
